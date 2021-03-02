@@ -35,7 +35,7 @@ public class CreateCommand {
 
 			channel.sendMessage(createEmbed(message.getAuthor())).queue(embedMessage -> {
 				if (Main.currentGame == null) {
-					Main.currentGame = new AmongUsGame(embedMessage.getIdLong());
+					Main.currentGame = new AmongUsGame(embedMessage.getIdLong(), message.getAuthor());
 
 				} else throw new RuntimeException("Cant run 2 games at once!");
 

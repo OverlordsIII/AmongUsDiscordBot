@@ -17,9 +17,11 @@ import net.dv8tion.jda.api.requests.restaction.pagination.ReactionPaginationActi
 public class AmongUsGame {
 
 	private final long messageId;
+	private final User author;
 
-	public AmongUsGame(long messageId) {
+	public AmongUsGame(long messageId, User authorId) {
 		this.messageId = messageId;
+		this.author = authorId;
 	}
 
 	public void getNumberOfPlayerPlaying(MessageChannel channel, Consumer<ReactionPaginationAction> queueAction) {
@@ -28,19 +30,11 @@ public class AmongUsGame {
 				.queue(queueAction);
 	}
 
-	private static List<User> toList(ReactionPaginationAction action) {
-		Iterator<User> userIterator = action.iterator();
-
-		List<User> arrayList = new ArrayList<>();
-
-		while (userIterator.hasNext()) {
-			arrayList.add(userIterator.next());
-		}
-
-		return arrayList;
-	}
-
 	public long getMessageId() {
 		return messageId;
+	}
+
+	public User getAuthor() {
+		return author;
 	}
 }

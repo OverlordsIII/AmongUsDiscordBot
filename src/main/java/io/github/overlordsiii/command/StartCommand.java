@@ -3,6 +3,7 @@ package io.github.overlordsiii.command;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -25,13 +26,23 @@ public class StartCommand  {
 	@SubscribeEvent
 	public void execute(MessageReceivedEvent event) {
 
-		if (Main.currentGame == null) return;
-
 		MessageChannel channel = event.getChannel();
 
 		Message message = event.getMessage();
 
-		if (!message.getContentRaw().equalsIgnoreCase("!start")) return;
+		if (!message.getContentRaw().equalsIgnoreCase("!start")) {
+			return;
+		}
+
+		if (Main.currentGame == null) {
+			channel.sendMessage("Cannot start a game if there was no game created! (Hint: do !create first and have your friends react to the rocket)").queue();
+			return;
+		}
+
+		if (Main.currentGame.getAuthor().getIdLong() != message.getAuthor().getIdLong()) {
+			channel.sendMessage("You cannot start the game since you are not the author! (The Author is " + Main.currentGame.getAuthor().getAsMention() + ")").queue();
+			return;
+		}
 
 		channel.sendMessage("Dming Users...").queue();
 
