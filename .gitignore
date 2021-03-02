@@ -1,0 +1,6 @@
+.gradle
+.idea
+build
+amongus.properties
+/src/main/resources/amongus.properties
+/src/main/resources/token.properties
