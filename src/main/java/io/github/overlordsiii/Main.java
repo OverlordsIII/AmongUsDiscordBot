@@ -6,6 +6,7 @@ import javax.security.auth.login.LoginException;
 
 import io.github.overlordsiii.command.CreateCommand;
 import io.github.overlordsiii.command.ReadyCommand;
+import io.github.overlordsiii.command.RocketReactionCommand;
 import io.github.overlordsiii.command.StartCommand;
 import io.github.overlordsiii.command.TestCommand;
 import io.github.overlordsiii.config.PropertiesHandler;
@@ -43,6 +44,7 @@ public class Main {
 			.addEventListeners(new ReadyCommand())
 			.addEventListeners(new CreateCommand())
 			.addEventListeners(new StartCommand())
+			.addEventListeners(new RocketReactionCommand())
 			.setActivity(Activity.of(CONFIG.getConfigOption("activityType", Activity.ActivityType::valueOf), CONFIG.getConfigOption("activityText", Function.identity())))
 			.setStatus(CONFIG.getConfigOption("status", OnlineStatus::valueOf))
 			.build();

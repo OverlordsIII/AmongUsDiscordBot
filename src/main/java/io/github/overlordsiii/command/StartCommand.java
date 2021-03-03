@@ -1,14 +1,11 @@
 package io.github.overlordsiii.command;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import io.github.overlordsiii.Main;
+import io.github.overlordsiii.game.AmongUsGame;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -16,7 +13,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
-import net.dv8tion.jda.api.requests.RestAction;
 
 public class StartCommand  {
 
@@ -35,31 +31,21 @@ public class StartCommand  {
 		}
 
 		if (Main.currentGame == null) {
-			channel.sendMessage("Cannot start a game if there was no game created! (Hint: do !create first and have your friends react to the rocket)").queue();
+			message.reply("Cannot start a game if there was no game created! (Hint: do !create first and have your friends react to the rocket)").queue(mes -> mes.suppressEmbeds(true).queue());
 			return;
 		}
 
 		if (Main.currentGame.getAuthor().getIdLong() != message.getAuthor().getIdLong()) {
-			channel.sendMessage("You cannot start the game since you are not the author! (The Author is " + Main.currentGame.getAuthor().getAsMention() + ")").queue();
+			message.reply("You cannot start the game since you are not the author! (The Author is " + Main.currentGame.getAuthor().getAsMention() + ". Do !messagelink for the link to the game message.)").queue();
 			return;
 		}
 
 		channel.sendMessage("Dming Users...").queue();
 
-		Main.currentGame.getNumberOfPlayerPlaying(channel, action -> {
+		List<User> playing = Main.currentGame.getPlayingUsers();
 
-			List<User> list = new ArrayList<>();
-
-			action.forEachAsync(value -> {
-				if (!value.isBot()) list.add(value);
-				return true;
-			}).thenRun(() -> {
-				filterAndDmImposters(list, channel);
-				list.forEach(user -> sendPrivateMessage(user, createCrewmateEmbedSpec(user)));
-			});
-
-
-		});
+		filterAndDmImposters(playing);
+		playing.forEach(user -> sendPrivateMessage(user, createCrewmateEmbedSpec(user)));
 
 
 		Main.currentGame = null;
@@ -67,7 +53,7 @@ public class StartCommand  {
 
 	}
 
-	private static void filterAndDmImposters(List<User> users, MessageChannel channel) {
+	private static void filterAndDmImposters(List<User> users) {
 
 		int imposters = Main.CONFIG.getConfigOption("imposters", Integer::parseInt);
 
