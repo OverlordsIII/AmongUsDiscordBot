@@ -1,6 +1,7 @@
 package io.github.overlordsiii.command;
 
 import io.github.overlordsiii.Main;
+import io.github.overlordsiii.util.EmbedUtil;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -22,7 +23,7 @@ public class RocketReactionCommand {
 			event.retrieveMessage().queue(message -> {
 				message.removeReaction(event.getReactionEmote().getEmoji(), event.getUser()).queue();
 				Main.currentGame.removeUser(event.getUser());
-				Main.currentGame.getMessage().editMessage(CreateCommand.createUpdatedEmbed(Main.currentGame.getAuthor(), Main.currentGame.getPlayingUsers())).queue();
+				Main.currentGame.getMessage().editMessage(EmbedUtil.createUpdatedEmbed(EmbedUtil.createDefaultEmbed(Main.currentGame.getAuthor()), Main.currentGame.getPlayingUsers())).queue();
 			});
 			return;
 		}
@@ -31,7 +32,7 @@ public class RocketReactionCommand {
 		event.retrieveMessage().queue(message -> {
 			message.removeReaction(event.getReactionEmote().getEmoji(), event.getUser()).queue();
 			Main.currentGame.addUser(event.getUser());
-			Main.currentGame.getMessage().editMessage(CreateCommand.createUpdatedEmbed(Main.currentGame.getAuthor(), Main.currentGame.getPlayingUsers())).queue();
+			Main.currentGame.getMessage().editMessage(EmbedUtil.createUpdatedEmbed(EmbedUtil.createDefaultEmbed(Main.currentGame.getAuthor()), Main.currentGame.getPlayingUsers())).queue();
 		});
 	}
 }

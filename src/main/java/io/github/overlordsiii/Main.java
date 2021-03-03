@@ -5,6 +5,7 @@ import java.util.function.Function;
 import javax.security.auth.login.LoginException;
 
 import io.github.overlordsiii.command.CreateCommand;
+import io.github.overlordsiii.command.MessageLinkCommand;
 import io.github.overlordsiii.command.ReadyCommand;
 import io.github.overlordsiii.command.RocketReactionCommand;
 import io.github.overlordsiii.command.StartCommand;
@@ -40,7 +41,7 @@ public class Main {
 		JDA client = JDABuilder
 			.createDefault(TOKEN.getConfigOption("token", Function.identity()))
 			.setEventManager(new AnnotatedEventManager())
-			.addEventListeners(new TestCommand())
+			.addEventListeners(new MessageLinkCommand())
 			.addEventListeners(new ReadyCommand())
 			.addEventListeners(new CreateCommand())
 			.addEventListeners(new StartCommand())
