@@ -30,7 +30,6 @@ public class StartCommand  {
 		if (!message.getContentRaw().equalsIgnoreCase("!start")) {
 			return;
 		}
-		//Cannot start a game if there was no game created!
 		if (Main.currentGame == null) {
 			message.reply(EmbedUtil.getCannotCreateEmbed(event.getAuthor(), null, null, "Cannot start a game if there was no game created!")).queue();
 			return;
@@ -38,6 +37,11 @@ public class StartCommand  {
 
 		if (Main.currentGame.getAuthor().getIdLong() != message.getAuthor().getIdLong()) {
 			message.reply(EmbedUtil.getCannotCreateEmbed(event.getAuthor(), Main.currentGame.getAuthor(), Main.currentGame.getMessage(), "You cannot start the game since you are not the author!")).queue();
+			return;
+		}
+
+		if (Main.currentGame.getPlayingUsers().size() < 2) {
+			message.reply(EmbedUtil.getCannotCreateEmbed(event.getAuthor(), Main.currentGame.getAuthor(), Main.currentGame.getMessage(), "Cannot start the game with only one person playing")).queue();
 			return;
 		}
 

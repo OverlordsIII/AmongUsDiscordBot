@@ -14,7 +14,7 @@ public class ReadyCommand {
 
 
 
-		System.out.printf("Logged bot in as %s on %s", event.getJDA().getSelfUser().getAsTag(), new Date().toString());
+		System.out.printf("Logged bot in as %s in %s servers on %s", event.getJDA().getSelfUser().getAsTag(), event.getJDA().getGuilds().size() , new Date().toString());
 	}
 
 }
