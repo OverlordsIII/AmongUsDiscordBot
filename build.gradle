@@ -1,3 +1,5 @@
+import java.lang.reflect.Method
+
 plugins {
     id 'java'
 }
@@ -20,7 +22,13 @@ dependencies {
 
 }
 
-task stage(dependsOn: ['build', 'clean'])
+task stage(dependsOn: ['build', 'clean']) {
+    Class main = Class.forName("io.github.overlordsiii.Main")
+
+    Method method = main.getMethod("main", String[].class)
+
+    method.invoke(null, new String[]{})
+}
 
 test {
     useJUnitPlatform()
