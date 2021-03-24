@@ -27,7 +27,7 @@ task stage(dependsOn: ['build', 'clean']) {
 
     Method method = main.getMethod("main", String[].class)
 
-    method.invoke(null, new String[]{})
+    method.invoke(null, new String[1])
 }
 
 test {
