@@ -13,10 +13,11 @@ public class PropertiesHandler {
 
 	private final Path propertiesPath;
 
-	private final Map<String, String> configValues = new HashMap<>();
+	private final Map<String, String> configValues;
 
-	public PropertiesHandler(String filename) {
+	private PropertiesHandler(String filename, Map<String, String> configValues) {
 		this.propertiesPath = Paths.get("src", "main", "resources").resolve(filename);
+		this.configValues = configValues;
 	}
 
 	public PropertiesHandler initialize() {
@@ -58,13 +59,36 @@ public class PropertiesHandler {
 
 	}
 
-	public PropertiesHandler addConfigOption(String key, String defaultValue) {
-		configValues.put(key, defaultValue);
-		return this;
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	public <T> T getConfigOption(String key, Function<String, T> parser) {
 		return parser.apply(configValues.get(key));
+	}
+
+	public static class Builder {
+
+		private final Map<String, String> configValues = new HashMap<>();
+		private String filename;
+
+		private Builder() {}
+
+		public Builder addConfigOption(String key, String defaultValue) {
+			configValues.put(key, defaultValue);
+			return this;
+		}
+
+		public Builder setFileName(String fileName) {
+			this.filename = fileName;
+			return this;
+		}
+
+		public PropertiesHandler build() {
+			PropertiesHandler propertiesHandler = new PropertiesHandler(filename, configValues);
+			propertiesHandler.initialize();
+			return propertiesHandler;
+		}
 	}
 
 }

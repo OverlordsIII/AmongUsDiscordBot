@@ -22,32 +22,47 @@ import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 public class Main {
 
 
-	public static final PropertiesHandler TOKEN = new PropertiesHandler("token.properties")
+	public static final PropertiesHandler TOKEN = PropertiesHandler.builder()
+		.setFileName("token.properties")
 		.addConfigOption("token", "")
-		.initialize();
+		.build();
 
-	public static final PropertiesHandler CONFIG = new PropertiesHandler("amongus.properties")
+	public static final PropertiesHandler CONFIG = PropertiesHandler.builder()
+		.setFileName("amongus.properties")
 		.addConfigOption("imposters", "1")
 		.addConfigOption("status", OnlineStatus.ONLINE.toString())
 		.addConfigOption("activityType", Activity.ActivityType.COMPETING.toString())
 		.addConfigOption("activityText", "Among Us Automatic Chooser")
-		.initialize();
+		.build();
 
 
 	public static AmongUsGame currentGame;
 
 	public static void main(String[] args) throws LoginException {
-
-		JDA client = JDABuilder
-			.createDefault(TOKEN.getConfigOption("token", Function.identity()))
-			.setEventManager(new AnnotatedEventManager())
-			.addEventListeners(new MessageLinkCommand())
-			.addEventListeners(new ReadyCommand())
-			.addEventListeners(new CreateCommand())
-			.addEventListeners(new StartCommand())
-			.addEventListeners(new RocketReactionCommand())
-			.setActivity(Activity.of(CONFIG.getConfigOption("activityType", Activity.ActivityType::valueOf), CONFIG.getConfigOption("activityText", Function.identity())))
-			.setStatus(CONFIG.getConfigOption("status", OnlineStatus::valueOf))
-			.build();
+		try {
+			JDA builder = JDABuilder
+				.createDefault(TOKEN.getConfigOption("token", Function.identity()))
+				.setEventManager(new AnnotatedEventManager())
+				.addEventListeners(new MessageLinkCommand())
+				.addEventListeners(new ReadyCommand())
+				.addEventListeners(new CreateCommand())
+				.addEventListeners(new StartCommand())
+				.addEventListeners(new RocketReactionCommand())
+				.setActivity(Activity.of(CONFIG.getConfigOption("activityType", Activity.ActivityType::valueOf), CONFIG.getConfigOption("activityText", Function.identity())))
+				.setStatus(CONFIG.getConfigOption("status", OnlineStatus::valueOf))
+				.build();
+		} catch (LoginException e) {
+			JDA builder = JDABuilder
+				.createDefault(System.getenv("TOKEN"))
+				.setEventManager(new AnnotatedEventManager())
+				.addEventListeners(new MessageLinkCommand())
+				.addEventListeners(new ReadyCommand())
+				.addEventListeners(new CreateCommand())
+				.addEventListeners(new StartCommand())
+				.addEventListeners(new RocketReactionCommand())
+				.setActivity(Activity.of(CONFIG.getConfigOption("activityType", Activity.ActivityType::valueOf), CONFIG.getConfigOption("activityText", Function.identity())))
+				.setStatus(CONFIG.getConfigOption("status", OnlineStatus::valueOf))
+				.build();
+		}
 	}
 }
