@@ -30,7 +30,11 @@ public class CreateCommand {
 		if (!content.equals("!create")) return;
 
 		if (Main.currentGame != null) {
-			message.reply(EmbedUtil.getCannotCreateEmbed(event.getAuthor(), Main.currentGame.getAuthor(), Main.currentGame.getMessage(), "You can't start a game if there is already one in progress!")).queue();
+			message
+				.reply(EmbedUtil.getCannotCreateEmbed(event.getAuthor(), Main.currentGame.getAuthor(), Main.currentGame.getMessage(),
+					"You can't start a game if there is already one in progress!"))
+				.mentionRepliedUser(false)
+				.queue();
 			return;
 		}
 

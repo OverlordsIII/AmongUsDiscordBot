@@ -22,13 +22,6 @@ dependencies {
 
 }
 
-task stage(dependsOn: ['build', 'clean']) {
-    Class main = Class.forName("io.github.overlordsiii.Main")
-
-    Method method = main.getMethod("main", String[].class)
-
-    method.invoke(null, new String[1])
-}
 
 test {
     useJUnitPlatform()

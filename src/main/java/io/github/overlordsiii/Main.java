@@ -18,7 +18,6 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 
-@SuppressWarnings({"unused", "FieldMayBeLocal"})
 public class Main {
 
 
